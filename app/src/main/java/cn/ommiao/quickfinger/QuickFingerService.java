@@ -4,13 +4,22 @@ import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.FingerprintGestureController;
 import android.view.accessibility.AccessibilityEvent;
 
+import cn.ommiao.quickfinger.function.AbsFunction;
+import cn.ommiao.quickfinger.function.AllFunctions;
+
 public class QuickFingerService extends AccessibilityService {
 
     private FingerpritGestureCallbacker callback;
     private FingerprintGestureController fingerprintGestureController;
 
+    public static int FUNCTION_ID_UP = 2;
+    public static int FUNCTION_ID_DOWN = 7;
+    public static int FUNCTION_ID_LEFT = 4;
+    public static int FUNCTION_ID_RIGHT = 4;
+
     @Override
     protected void onServiceConnected() {
+        AbsFunction.init(this);
         fingerprintGestureController = getFingerprintGestureController();
         callback = new FingerpritGestureCallbacker();
         fingerprintGestureController.registerFingerprintGestureCallback(callback, null);
@@ -37,15 +46,17 @@ public class QuickFingerService extends AccessibilityService {
         @Override
         public void onGestureDetected(int gesture) {
             switch (gesture){
-                case FingerprintGestureController.FINGERPRINT_GESTURE_SWIPE_DOWN:
-                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_NOTIFICATIONS);
-                    break;
                 case FingerprintGestureController.FINGERPRINT_GESTURE_SWIPE_UP:
-                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_TAKE_SCREENSHOT);
+                    AllFunctions.getFunctionById(FUNCTION_ID_UP).doEvent();
                     break;
+                case FingerprintGestureController.FINGERPRINT_GESTURE_SWIPE_DOWN:
+                    AllFunctions.getFunctionById(FUNCTION_ID_DOWN).doEvent();
+                break;
                 case FingerprintGestureController.FINGERPRINT_GESTURE_SWIPE_LEFT:
+                    AllFunctions.getFunctionById(FUNCTION_ID_LEFT).doEvent();
+                    break;
                 case FingerprintGestureController.FINGERPRINT_GESTURE_SWIPE_RIGHT:
-                    performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK);
+                    AllFunctions.getFunctionById(FUNCTION_ID_RIGHT).doEvent();
                     break;
             }
         }

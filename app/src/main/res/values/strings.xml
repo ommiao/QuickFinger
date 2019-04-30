@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">QuickFinger</string>
     <string name="accessibility_info">开启本服务将会监听指纹手势，并执行相应操作。</string>
+    <string name="function_disabled">该功能不可用</string>
 </resources>
